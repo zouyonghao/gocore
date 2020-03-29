@@ -31,3 +31,20 @@ https://wiki.osdev.org/GCC_Cross-Compiler
 
 https://wiki.osdev.org/Go_Bare_Bones
 
+## 进度
+
+### [boot](https://github.com/zouyonghao/gocore/commit/7a1cfd62e6754b3f45ba82880f856c6912aaa413)
+
+### [protected mode](https://github.com/zouyonghao/gocore/commit/bdbc28aa48d31463361a8cbbe9b9074f9d65f6bd)
+
+### console
+
+### init physical memory management
+
+### init interrupt controller
+
+### init interrupt descriptor table
+
+### init clock interrupt
+
+### enable irq interrupt
