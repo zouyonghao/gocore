@@ -18,8 +18,8 @@ stack_top:
 section .text
 global _start
 _start:
-  extern bootgo.kernel.Main
-  call bootgo.kernel.Main
+  extern gocore.kernel.Main
+  call gocore.kernel.Main
   cli
 
 .hang:

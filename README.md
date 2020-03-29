@@ -1,13 +1,9 @@
-# bootgo
-
-A barebones OS kernel written in go
-
-The kernel contains some code modified from osdev barebones tutorial http://wiki.osdev.org/Bare_Bones
+# Gocore
 
 ## setup
-To compile bootgo You need a gccgo cross-compiler(my gccgo version is 5.2.0)
+To compile gocore You need a gccgo cross-compiler
 
-1. build a target i386/i686 gcc cross-compiler with go enabled, follow the article http://wiki.osdev.org/GCC_Cross-Compiler (gcc 5.2.0 is recommended)
+1. build a target i386/i686 gcc cross-compiler with go enabled, follow the article http://wiki.osdev.org/GCC_Cross-Compiler
 
 2. install nasm from your repositories
 
