@@ -21,7 +21,7 @@ runtime/libgo.so: runtime/libgo.c
 	$(GCC) -shared -c libgo.c -o libgo.so -std=gnu99 -ffreestanding
 
 run-qemu:
-	$(QEMU) -kernel gocore.bin
+	$(QEMU) -fda gocore.bin
 
 clean:
 	rm -f *.o

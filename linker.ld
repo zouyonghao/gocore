@@ -1,26 +1,26 @@
-ENTRY(_start)
+ENTRY(boot)
+OUTPUT_FORMAT("binary")
+SECTIONS {
+	. = 0x7c00;
+	.text :
+	{
+        *(.boot)
+		*(.text)
+	}
+    
+    .rodata :
+    {
+    	*(.rodata)
+    }
 
-SECTIONS
-{
-  . = 1M;
+    .data :
+    {
+    	*(.data)
+    }
 
-  .multiboot :
-  {
-    *(.multiboot)
-  }
-
-  .text :
-  {
-    *(.text)
-  }
-
-  .data :
-  {
-    *(.data)
-  }
-  
-  .bss :
-  {
-    *(.boot_stack)
-  }
+    .bss :
+    {
+    	*(.bss)
+    }
 }
+
