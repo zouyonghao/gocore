@@ -30,3 +30,4 @@ https://wiki.osdev.org/GCC_Cross-Compiler
 可以再参考这里
 
 https://wiki.osdev.org/Go_Bare_Bones
+
