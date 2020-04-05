@@ -20,6 +20,7 @@ To compile gocore You need a gccgo cross-compiler
 交叉编译
 
 https://wiki.osdev.org/GCC_Cross-Compiler
+https://wiki.osdev.org/Go_Bare_Bones
 
 我用的`binutils-2.34`和`gcc-7.5.0`，按照教程走就可以了，除了`gcc configure`这一步改成
 
@@ -27,9 +28,11 @@ https://wiki.osdev.org/GCC_Cross-Compiler
 ../gcc-x.y.z/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enable-languages=c,c++,go --without-headers
 ```
 
-可以再参考这里
+源码安装高版本gcc如9.3.0时，可能会发生错误:
+gcc configure: error: Building GCC requires GMP 4.2+, MPFR 2.3.1+ and MPC 0.8.0+
+解决方法: 在gcc源码目录下, ./contrib/download_prerequisites, 会自动下载相关依赖.
 
-https://wiki.osdev.org/Go_Bare_Bones
+
 
 ## 进度
 

@@ -1,7 +1,7 @@
 GCCGO := i686-elf-gccgo
 GCC := i686-elf-gcc
 NASM := nasm
-QEMU := qemu
+QEMU := qemu-system-i386
 
 default: build
 

@@ -38,15 +38,10 @@ func makeVGAEntry(c byte, color uint8) uint16 {
 }
 
 func terminalInit() {
-  row = 0
+  row = 1
   column = 0
   color = makeColor(COLOR_LIGHT_GREY, COLOR_BLACK)
   buffer = 0xB8000
-  for y := 0; y < VGA_HEIGHT; y += 1 {
-    for x := 0; x < VGA_WIDTH; x += 1 {
-      terminalPutEntryAt(' ', color, uint8(x), uint8(y))
-    }
-  }
 }
 
 func terminalSetColor(c uint8) {
