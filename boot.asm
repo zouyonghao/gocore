@@ -43,7 +43,7 @@ boot:
 gdt_start:                ;the first entry of gdt table, 64 bits
 	dq 0x0                ;0x00000000(4 bytes) as a null segment
 gdt_code:                 ;the second entry, set the segment full 4G (flat mode)
-	dw 0xFFFF             ;limit_low, set limit 0xFFFFFFFF(4 bytes)
+	dw 0xFFFF             ;limit_low, set limit 0xFFFFF(20 Bit). multiplied by 4096
 	dw 0x0                ;base_low, set base 0x00000000(4 bytes)
 	db 0x0                ;base_middle
 	db 10011010b          ;present(1B),ring level(2B),type(1B)
