@@ -1,4 +1,4 @@
-section .boot
+section .text
 bits 16
 global boot
 boot:

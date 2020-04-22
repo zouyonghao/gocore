@@ -2,4 +2,5 @@
 *.bin
 *.so
 .project
+q.log
 .gitignore
