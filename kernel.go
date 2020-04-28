@@ -1,7 +1,10 @@
 package kernel
 
 func Main() {
-	writeString("hello, kernel!")
 	terminalInit()
+	writeString("hello, kernel!")
 	pmmInit()
+	// for i := 0; i < 10; i++ {
+	// 	writeString("a")
+	// }
 }

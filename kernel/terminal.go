@@ -40,36 +40,32 @@ func makeVGAEntry(c byte, color uint8) uint16 {
 func terminalInit() {
 	row = 1
 	column = 0
-	color = makeColor(COLOR_LIGHT_GREY, COLOR_BLACK)
+	color = makeColor(COLOR_WHITE, COLOR_BLACK)
 	buffer = 0xB8000
 }
 
-func terminalSetColor(c uint8) {
-	color = c
-}
-
-func terminalPutEntryAt(c byte, color uint8, x uint8, y uint8) {
-	index := y*VGA_WIDTH + x
+func terminalPutEntryAt(c byte, color uint8, column uint8, row uint8) {
+	index := uint16(row)*VGA_WIDTH + uint16(column)
 	addr := (*uint16)(unsafe.Pointer(buffer + 2*uintptr(index)))
 	*addr = makeVGAEntry(c, color)
 }
 
 func terminalPutChar(c byte) {
 	terminalPutEntryAt(c, color, column, row)
-	column += 1
-	if column == VGA_WIDTH {
+	column++
+	if column > VGA_WIDTH {
 		column = 0
-		row += 1
-		if row == VGA_HEIGHT {
+		row++
+		if row > VGA_HEIGHT {
 			row = 0
 		}
 	}
 }
 
 func writeString(data string) {
-	for i := 0; i < len(data); i += 1 {
+	row++
+	column = 0
+	for i := 0; i < len(data); i++ {
 		terminalPutChar(data[i])
 	}
-	row += 1
-	column = 0
 }
