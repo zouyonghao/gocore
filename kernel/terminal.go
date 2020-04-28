@@ -38,7 +38,7 @@ func makeVGAEntry(c byte, color uint8) uint16 {
 }
 
 func terminalInit() {
-	row = 1
+	row = 0
 	column = 0
 	color = makeColor(COLOR_WHITE, COLOR_BLACK)
 	buffer = 0xB8000
