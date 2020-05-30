@@ -6,11 +6,19 @@ import "unsafe"
 // themselves, so that the compiler will export them.
 //
 //go:linkname memequal runtime.memequal
+//go:linkname memequal8 runtime.memequal8$descriptor
 //go:linkname memequal16 runtime.memequal16$descriptor
 //go:linkname memequal32 runtime.memequal32$descriptor
+//go:linkname memequal64 runtime.memequal64$descriptor
 //go:linkname memhash runtime.memhash
+//go:linkname memhash8 runtime.memhash8$descriptor
 //go:linkname memhash16 runtime.memhash16$descriptor
 //go:linkname memhash32 runtime.memhash32$descriptor
+//go:linkname memhash64 runtime.memhash64$descriptor
+
+//go:linkname _memhash8 runtime.memhash8
+//go:linkname _memhash16 runtime.memhash16
+//go:linkname _memhash32 runtime.memhash32
 
 const (
 	// Constants for multiplication: four random odd 32-bit numbers.
@@ -93,6 +101,22 @@ tail:
 	return uintptr(h)
 }
 
+func _memhash8(p unsafe.Pointer, h uintptr) uintptr {
+	return memhash8(p, h)
+}
+
+func _memhash16(p unsafe.Pointer, h uintptr) uintptr {
+	return memhash16(p, h)
+}
+
+func _memhash32(p unsafe.Pointer, h uintptr) uintptr {
+	return memhash32(p, h)
+}
+
+func memhash8(p unsafe.Pointer, h uintptr) uintptr {
+	return memhash(p, h, 1)
+}
+
 func memhash16(p unsafe.Pointer, h uintptr) uintptr {
 	return memhash(p, h, 2)
 }
@@ -100,6 +124,20 @@ func memhash16(p unsafe.Pointer, h uintptr) uintptr {
 func memhash32(p unsafe.Pointer, seed uintptr) uintptr {
 	h := uint32(seed + 4*hashkey[0])
 	h ^= readUnaligned32(p)
+	h = rotl_15(h*m1) * m2
+	h ^= h >> 17
+	h *= m3
+	h ^= h >> 13
+	h *= m4
+	h ^= h >> 16
+	return uintptr(h)
+}
+
+func memhash64(p unsafe.Pointer, seed uintptr) uintptr {
+	h := uint32(seed + 8*hashkey[0])
+	h ^= readUnaligned32(p)
+	h = rotl_15(h*m1) * m2
+	h ^= readUnaligned32(add(p, 4))
 	h = rotl_15(h*m1) * m2
 	h ^= h >> 17
 	h *= m3
@@ -123,10 +161,18 @@ func memequal(a, b unsafe.Pointer, size uintptr) bool {
 	return __builtin_memcmp(a, b, size)
 }
 
+func memequal8(p, q unsafe.Pointer) bool {
+	return *(*int8)(p) == *(*int8)(q)
+}
+
 func memequal16(p, q unsafe.Pointer) bool {
 	return *(*int16)(p) == *(*int16)(q)
 }
 
 func memequal32(p, q unsafe.Pointer) bool {
 	return *(*int32)(p) == *(*int32)(q)
+}
+
+func memequal64(p, q unsafe.Pointer) bool {
+	return *(*int64)(p) == *(*int64)(q)
 }
