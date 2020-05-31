@@ -39,6 +39,7 @@ type TSS32 struct {
 	Gs       uint32
 	Ldtr     uint32
 	Iomap    uint32
+	// _        uint32
 }
 
 //var GDT uint64
@@ -107,8 +108,8 @@ func loadTable() {
 	TSSB.Iomap = 0x40000000
 
 	Table[0] = Pack(GDTDesc{Base: 0, Limit: 0, Type: 0})
-	Table[1] = Pack(GDTDesc{Base: 0, Limit: 0xFFFFFFFF, Type: 0x9A})
-	Table[2] = Pack(GDTDesc{Base: 0, Limit: 0xFFFFFFFF, Type: 0x92})
+	Table[1] = Pack(GDTDesc{Base: 0, Limit: 0xFFFFFFFF, Type: 0x9A}) // code
+	Table[2] = Pack(GDTDesc{Base: 0, Limit: 0xFFFFFFFF, Type: 0x92}) // data
 	Table[3] = Pack(GDTDesc{Base: uint32(uintptr(unsafe.Pointer(&TSSA.Backlink))), Limit: uint32(unsafe.Sizeof(TSSA)), Type: 0x89})
 	Table[4] = Pack(GDTDesc{Base: uint32(uintptr(unsafe.Pointer(&TSSB.Backlink))), Limit: uint32(unsafe.Sizeof(TSSB)), Type: 0x89})
 

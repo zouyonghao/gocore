@@ -24,10 +24,10 @@ func taskswitch3()
 func taskswitch4()
 
 func taskB() {
-	for i := 0; i < 10; i++ {
-		video.Print("This is task B")
+	for i := 0; i < 10000; i++ {
+		video.Print("This is Task B\n")
 	}
-	// taskswitch3()
+	taskswitch3()
 }
 
 //extern sys_malloc
@@ -53,34 +53,38 @@ func Kmain() {
 	pit.Init()
 	kbd.Init()
 	video.Print("Hello kernel\n")
-	// gdt.LoadTR(3 * 8)
-
-	// for {
-	// 	video.Print("abc\n")
-	// }
+	gdt.LoadTR(3 * 8)
 
 	gdt.TSSB.Eip = uint32(ptr.FuncToPtr(taskB))
-	gdt.TSSB.Eflags = 0x00000202
+	gdt.TSSB.Eflags = 0x00000202 | (1 << 9)
 	gdt.TSSB.Eax = 0
 	gdt.TSSB.Ecx = 0
 	gdt.TSSB.Edx = 0
 	gdt.TSSB.Ebx = 0
-	gdt.TSSB.Esp = uint32((kernelEnd() & 0xFFFFF000) + 0x1000)
+	gdt.TSSB.Esp0 = uint32(kernelEnd() + 4096)
+	gdt.TSSB.Esp = uint32(kernelEnd() + 4096)
 	// gdt.TSSB.Esp = sysAlloc(10)
 	gdt.TSSB.Ebp = 0
 	gdt.TSSB.Esi = 0
 	gdt.TSSB.Edi = 0
-	gdt.TSSB.Es = 1 * 8
-	gdt.TSSB.Cs = 2 * 8
-	gdt.TSSB.Ss = 1 * 8
-	gdt.TSSB.Ds = 1 * 8
-	gdt.TSSB.Fs = 1 * 8
-	gdt.TSSB.Gs = 1 * 8
 
-	// taskswitch3()
-	taskswitch4()
+	gdt.TSSB.Ss0 = 2 * 8
+	gdt.TSSB.Cs = 1 * 8
 
-	for i := 0; i < 10; i++ {
-		video.Print("abc\n")
+	gdt.TSSB.Es = 2 * 8
+	gdt.TSSB.Ss = 2 * 8
+	gdt.TSSB.Ds = 2 * 8
+	gdt.TSSB.Fs = 2 * 8
+	gdt.TSSB.Gs = 2 * 8
+
+	var tmp int = 0
+	for {
+		video.Print("This is Task A\n")
+		if tmp%1000000 == 999 {
+			taskswitch4()
+		}
+		tmp++
 	}
+	// taskswitch3()
+
 }

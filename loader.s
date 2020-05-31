@@ -68,6 +68,10 @@ STACKPTR equ stack + STACKSIZE
 loader:
     mov  esp, stack + STACKSIZE ; Setup stack pointer
 
+    ; Check multiboot bootloader
+    cmp     eax, 0x2BADB002
+    jne     .hang
+
     mov  [magic], eax
     mov  [mbd], ebx
 
