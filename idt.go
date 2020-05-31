@@ -35,7 +35,6 @@ func SetupIDT() {
 	IDT |= (uint64(uintptr(unsafe.Pointer(&table))) & 0xFFFFFFFF) << 16
 	loadTable()
 	loadIDT()
-	//genericInt()
 
 	copyStr(&ErrorMsg[0], "Division By Zero Exception")
 	copyStr(&ErrorMsg[1], "Debug Exception")
@@ -80,8 +79,6 @@ func SetupIRQ() {
 	table[47] = Pack(IDTDesc{Offset: uint32(ptr.FuncToPtr(irq15)), Selector: 0x08, TypeAttr: 0x8E})
 
 	asm.EnableInts()
-	//dummy := pitHandler
-	//IrqRoutines[0] = **(**uintptr)(unsafe.Pointer(&dummy))
 }
 
 func Irq0() {
@@ -94,7 +91,7 @@ func loadIDT()
 func remapIRQ() {
 	master := asm.InportB(0x21)
 	slave := asm.InportB(0xA1)
-	
+
 	asm.OutportB(0x20, 0x11)
 	asm.IOWait()
 	asm.OutportB(0xA0, 0x11)
@@ -107,31 +104,27 @@ func remapIRQ() {
 	asm.IOWait()
 	asm.OutportB(0xA1, 0x02)
 	asm.IOWait()
-	
+
 	asm.OutportB(0x21, 0x01)
 	asm.IOWait()
 	asm.OutportB(0xA1, 0x01)
 	asm.IOWait()
-	
+
 	asm.OutportB(0x21, master)
 	asm.OutportB(0xA1, slave)
-	//asm.OutportB(0x21, 0xFF)
-	//asm.OutportB(0xA1, 0xFF)
 }
 
 var ErrorMsg [20][40]byte
 
 func ISR(r *regs.Regs) {
-	//video.PrintHex(uint64(r.IntNo), false, true, true, 8)
-
 	if r.IntNo < 32 {
-		
+
 		if r.IntNo > 18 {
 			video.Error(ErrorMsg[19], int(r.IntNo), true)
 		} else {
-			if r.ErrCode != 0{
+			if r.ErrCode != 0 {
 				video.Print("Error Code: ")
-				video.PrintHex(uint64(r.ErrCode), false, true,true, 8)
+				video.PrintHex(uint64(r.ErrCode), false, true, true, 8)
 			}
 			video.Error(ErrorMsg[r.IntNo], int(r.IntNo), true)
 		}
@@ -155,14 +148,13 @@ func RemoveIRQ(index uint8) {
 }
 
 func IRQ(r *regs.Regs) {
-	if r.IntNo == 7{
+	if r.IntNo == 7 {
 		asm.OutportB(0x20, 0x0B)
 		irr := asm.InportB(0x20)
-		if irr & 0x80 == 0 {
+		if irr&0x80 == 0 {
 			return
 		}
 	}
-	//video.PrintHex(uint64(r.IntNo), false, true, true, 4)
 	var handler uintptr = IrqRoutines[r.IntNo-32]
 	if handler != 0 {
 		call(handler, r)
@@ -181,10 +173,6 @@ func PtrToFunc(ptr uintptr) func(r *regs.Regs) //Y U no allow (func())(unsafe.Po
 
 //extern go.pit.Handler
 func pitHandler(r *regs.Regs)
-
-//func Table()*[size]IDTDescPacked{
-//	return (*[size]IDTDescPacked)(ptr.GetAddr(table))
-//}
 
 func loadTable() {
 	table[0] = Pack(IDTDesc{Offset: uint32(ptr.FuncToPtr(isr0)), Selector: 0x08, TypeAttr: 0x8E})

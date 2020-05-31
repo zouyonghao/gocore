@@ -3,5 +3,6 @@
         "stdint.h": "c",
         "cstdint": "c",
         "c++config.h": "c"
-    }
+    },
+    "go.useLanguageServer": true
 }

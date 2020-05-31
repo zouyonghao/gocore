@@ -10,12 +10,12 @@ import (
 var ticks int
 
 func handler(r *regs.Regs) {
-	/*ticks++
+	ticks++
 	if ticks%36 == 0 {
-		//video.Println("Tick")
+		video.Println("Tick")
 	} else if ticks%36 == 18 {
-		//video.Println("Tock")
-	}*/
+		video.Println("Tock")
+	}
 }
 
 func Init() {

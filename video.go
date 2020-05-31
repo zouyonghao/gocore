@@ -3,12 +3,11 @@ package video
 import (
 	"color"
 	"ptr"
-	//"unsafe"
 )
 
 var x, y int
 var termColor color.Color
-var vidMem uintptr //*[25][80][2]byte
+var vidMem uintptr
 
 func vidPtr() *[25][80][2]byte {
 	return (*[25][80][2]byte)(ptr.GetAddr(vidMem))
@@ -16,9 +15,7 @@ func vidPtr() *[25][80][2]byte {
 
 func Init() {
 	vidMem = 0xB8000
-	//vidmem = uintptr(0xB8000)
 	termColor = color.MakeColor(color.LIGHT_GRAY, color.BLACK)
-	//PrintHex(uint64(uintptr(unsafe.Pointer(&vidMem))), false, true, true, 8)
 }
 
 func SetColor(c color.Color) {
@@ -33,7 +30,7 @@ func Print(line string) {
 
 func Println(line string) {
 	Print(line)
-	NL()
+	Newline()
 }
 
 func PrintHex(num uint64, caps, prefix, newline bool, digits int8) {
@@ -53,16 +50,9 @@ func PrintHex(num uint64, caps, prefix, newline bool, digits int8) {
 		}
 	}
 	if newline {
-		NL()
+		Newline()
 	}
 }
-
-/*
-func PrintInt(num interface{}, base, digits int8, caps, prefix bool){
-	switch num.(type){
-		default:
-	}
-}*/
 
 func Int4ToHex(digit uint8, caps bool) rune {
 	if digit < 10 {
@@ -74,7 +64,7 @@ func Int4ToHex(digit uint8, caps bool) rune {
 	}
 }
 
-func NL() {
+func Newline() {
 	vidPtr()[y][x][0] = 0
 	vidPtr()[y][x][1] = 0
 	x = 0
@@ -86,7 +76,7 @@ func NL() {
 
 func PutChar(c rune) {
 	if c == '\n' {
-		NL()
+		Newline()
 		updateCursor()
 	} else if c == '\t' {
 		x += 4 - (x % 4)
@@ -144,7 +134,7 @@ func Error(errorMsg [40]byte, errorCode int, halt bool) {
 	for i := 0; i < 40; i++ {
 		PutChar(rune(errorMsg[i]))
 	}
-	NL()
+	Newline()
 	if halt {
 		Println("System Halted.")
 		for {
