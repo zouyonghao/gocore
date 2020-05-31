@@ -63,6 +63,7 @@ MultiBootHeader:
     dd CHECKSUM
 
 STACKSIZE equ 0x4000  ; Define our stack size at 16k
+STACKPTR equ stack + STACKSIZE
 
 loader:
     mov  esp, stack + STACKSIZE ; Setup stack pointer
@@ -109,7 +110,27 @@ __load_gdt:
     mov [gdtr], ax
     lgdt [gdtr]
     ret
-    
+
+global __stack_ptr
+__stack_ptr:
+	mov eax, dword STACKPTR
+	ret
+
+global __load_tr
+__load_tr:
+	ltr [esp+4]
+	ret
+
+global __taskswitch3
+__taskswitch3:	; void taskswitch4(void);
+	jmp 3*8:0
+	ret
+
+global __taskswitch4
+__taskswitch4:	; void taskswitch4(void);
+	jmp 4*8:0
+	ret
+
 __reload_segments:
 	jmp 0x08:reload_cs
     reload_cs:
