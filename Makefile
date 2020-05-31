@@ -23,7 +23,7 @@ SOURCE_OBJECTS = $(CORE_SOURCES)
 all: kernel.bin
 
 clean:
-	rm -f $(SOURCE_OBJECTS) $(TEST_EXECS) kernel.bin kernel.iso
+	rm -f $(SOURCE_OBJECTS) $(TEST_EXECS) kernel.bin kernel.o
 
 boot: kernel.bin
 	qemu-system-i386 -kernel kernel.bin -m 1024

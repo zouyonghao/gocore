@@ -28,7 +28,7 @@ func Kmain(mdb uintptr, magic uint16) {
 	idt.SetupIRQ()
 	pit.Init()
 	kbd.Init()
-	video.Print("Hello")
+	video.Print("Hello kernel\n")
 
 	for i := 0; i < 16; i++ {
 		video.Print("abc\n")
