@@ -135,6 +135,10 @@ global __taskswitch4
 __taskswitch4:	; void taskswitch4(void);
 	jmp 4*8:0
 	ret
+global __syscall
+__syscall:
+	int 47
+	ret
 
 __reload_segments:
 	jmp 0x08:reload_cs

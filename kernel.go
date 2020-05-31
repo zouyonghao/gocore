@@ -7,6 +7,8 @@ import (
 	"pit"
 	"ptr"
 	"video"
+	"regs"
+	"unsafe"
 )
 
 //extern __test_int
@@ -23,8 +25,16 @@ func taskswitch3()
 //extern __taskswitch4
 func taskswitch4()
 
+//extern __syscall
+func syscall()
+
+func syscall_imp(r *regs.Regs) {
+    video.Print("syscall\n")
+}
+
 func taskB() {
 	for i := 0; i < 10000; i++ {
+	    syscall()
 		video.Print("This is Task B\n")
 	}
 	taskswitch3()
@@ -59,6 +69,10 @@ func Kmain() {
 	pit.Init()
 	kbd.Init()
 	video.Print("Hello kernel\n")
+	
+	dummy := syscall_imp
+	idt.AddIRQ(15, **(**uintptr)(unsafe.Pointer(&dummy)))
+	
 	gdt.LoadTR(3 * 8)
 
 	gdt.TSSB.Eip = uint32(ptr.FuncToPtr(taskB))
