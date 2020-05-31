@@ -19,6 +19,7 @@ import "unsafe"
 //go:linkname _memhash8 runtime.memhash8
 //go:linkname _memhash16 runtime.memhash16
 //go:linkname _memhash32 runtime.memhash32
+//go:linkname _memhash64 runtime.memhash64
 
 const (
 	// Constants for multiplication: four random odd 32-bit numbers.
@@ -111,6 +112,10 @@ func _memhash16(p unsafe.Pointer, h uintptr) uintptr {
 
 func _memhash32(p unsafe.Pointer, h uintptr) uintptr {
 	return memhash32(p, h)
+}
+
+func _memhash64(p unsafe.Pointer, h uintptr) uintptr {
+	return memhash64(p, h)
 }
 
 func memhash8(p unsafe.Pointer, h uintptr) uintptr {

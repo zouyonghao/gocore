@@ -11,7 +11,11 @@ global __go_register_gc_roots
 global __go_runtime_error
 global __go_type_hash_identity
 global __go_type_equal_identity
+global __go_type_hash_error
+global __go_type_equal_error
 global __go_print_string
+global __go_print_uint64
+global __go_print_bool
 global __go_print_nl
 
 global __load_idt
@@ -20,12 +24,23 @@ global __generic_isr
 global __test_int
 global __arbitrary_convert
 global __call
-global __remap_irq
 global __reload_segments
+global __enable_paging
+global __kernel_start
+global __kernel_end
+global __kernel_size
+
+extern kernel_start
+extern kernel_end
+extern kernel_size
 
 extern go.kernel.Kmain
-extern go.video.Error
-extern go.video.Print
+extern go.kernel.init
+extern go.stdlib.ErrCode
+extern go.types.HashIdent
+extern go.types.EqualIdent
+extern go.types.HashError
+extern go.types.EqualError
 extern go.video.Newline
 
 extern go.idt.IDT
@@ -42,6 +57,7 @@ CHECKSUM    equ -(MAGIC + FLAGS)
 section .text
 
 align 4
+MultiBootHeader:
     dd MAGIC
     dd FLAGS
     dd CHECKSUM
@@ -61,15 +77,20 @@ loader:
     hlt
     jmp  .hang
 
-; Go compatibility - noop'd
+; Go compatibility
 __go_runtime_error:
-    jmp go.video.Error
+    jmp go.stdlib.ErrCode
 __go_type_hash_identity:
-    ret
+    jmp go.types.HashIdent
 __go_type_equal_identity:
-    ret
+    jmp go.types.EqualIdent
+__go_type_hash_error:
+    jmp go.types.HashError
+__go_type_equal_error:
+    jmp go.types.EqualError
 __go_print_string:
-    jmp go.video.Print
+__go_print_uint64:
+__go_print_bool:
 __go_print_nl:
     jmp go.video.Newline
     
@@ -109,31 +130,40 @@ __call:
 	call eax
 	leave
 	ret
+	
+__enable_paging:
+	push ebp
+	mov ebp, esp
+	
+	mov eax, cr4
+	or eax, 0x20
+	mov cr4, eax
+	
+	;mov ecx, 0xC0000080
+	;rdmsr
+	;or eax, 0x101
+	;wrmsr
+	
+	mov eax, [esp+8]
+	mov cr3, eax
+	
+	mov eax, cr0
+	or eax, 0x80000000
+	mov cr0, eax
+	
+	mov esp, ebp
+	pop ebp
+	ret
     
 __arbitrary_convert: ret
 
-__remap_irq:
-    push eax
-    mov al, 0x11
-    out 0x20, al
-    out 0xA0, al
-    mov al, 0x20
-    out 0x21, al
-    mov al, 0x28
-    out 0xA1, al
-    mov al, 0x04
-    out 0x21, al
-    mov al, 0x02
-    out 0xA1, al
-    mov al, 0x01
-    out 0x21, al
-    out 0xA1, al
-    mov al, 0x00
-    out 0x21, al
-    out 0xA1, al
-    pop eax
-    ret
-
+__kernel_start:
+	mov eax, kernel_start
+	ret
+	
+__kernel_end:
+	mov eax, kernel_end
+	ret
 
 section .bss
 

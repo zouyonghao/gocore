@@ -4,6 +4,7 @@ import (
 	"gdt"
 	"idt"
 	"kbd"
+	"page"
 	"pit"
 	"video"
 )
@@ -29,6 +30,7 @@ func Kmain(mdb uintptr, magic uintptr) {
 	gdt.SetupGDT()
 	idt.SetupIDT()
 	idt.SetupIRQ()
+	page.Init()
 	pit.Init()
 	kbd.Init()
 	video.Print("Hello kernel\n")

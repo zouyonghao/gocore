@@ -15,7 +15,13 @@ QEMU = qemu-system-i386
 
 ### Sources
 
-CORE_SOURCES = loader.o interupts.o asm.o asm.go.o asm.gox regs.go.o regs.gox ptr.go.o ptr.gox color.go.o color.gox video.go.o video.gox gdt.go.o gdt.gox idt.go.o idt.gox pit.go.o pit.gox kbd.go.o kbd.gox runtime.go.o libgo.o kernel.go.o
+CORE_SOURCES = loader.o interupts.o \
+				asm.o asm.go.o asm.gox regs.go.o regs.gox ptr.go.o ptr.gox color.go.o color.gox video.go.o video.gox \
+				stdlib.go.o stdlib.gox \
+				types.go.o types.gox \
+				page.go.o page.gox \
+				gdt.go.o gdt.gox idt.go.o idt.gox \
+				pit.go.o pit.gox kbd.go.o kbd.gox runtime.go.o libgo.o kernel.go.o
 
 SOURCE_OBJECTS = $(CORE_SOURCES)
  

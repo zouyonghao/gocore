@@ -148,6 +148,3 @@ func Scroll() {
 	}
 	y = 24
 }
-
-//type Printer struct {
-//}
