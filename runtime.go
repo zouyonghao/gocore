@@ -5,6 +5,7 @@ import "unsafe"
 // For gccgo, use go:linkname to rename compiler-called functions to
 // themselves, so that the compiler will export them.
 //
+// for gcc7.5.0
 //go:linkname memequal runtime.memequal
 //go:linkname memequal8 runtime.memequal8$descriptor
 //go:linkname memequal16 runtime.memequal16$descriptor
@@ -16,10 +17,20 @@ import "unsafe"
 //go:linkname memhash32 runtime.memhash32$descriptor
 //go:linkname memhash64 runtime.memhash64$descriptor
 
-//go:linkname _memhash8 runtime.memhash8
-//go:linkname _memhash16 runtime.memhash16
-//go:linkname _memhash32 runtime.memhash32
-//go:linkname _memhash64 runtime.memhash64
+
+// for gcc9.3.0
+//go:linkname memhash8_1 runtime.memhash8
+//go:linkname memhash16_1 runtime.memhash16
+//go:linkname memhash32_1 runtime.memhash32
+//go:linkname memhash64_1 runtime.memhash64
+//go:linkname memhash8_2 runtime.memhash8..f
+//go:linkname memhash16_2 runtime.memhash16..f
+//go:linkname memhash32_2 runtime.memhash32..f
+//go:linkname memhash64_2 runtime.memhash64..f
+//go:linkname memequal8_1 runtime.memequal8..f
+//go:linkname memequal16_1 runtime.memequal16..f
+//go:linkname memequal32_1 runtime.memequal32..f
+//go:linkname memequal64_1 runtime.memequal64..f
 
 const (
 	// Constants for multiplication: four random odd 32-bit numbers.
@@ -102,19 +113,35 @@ tail:
 	return uintptr(h)
 }
 
-func _memhash8(p unsafe.Pointer, h uintptr) uintptr {
+func memhash8_1(p unsafe.Pointer, h uintptr) uintptr {
 	return memhash8(p, h)
 }
 
-func _memhash16(p unsafe.Pointer, h uintptr) uintptr {
+func memhash8_2(p unsafe.Pointer, h uintptr) uintptr {
+	return memhash8(p, h)
+}
+
+func memhash16_1(p unsafe.Pointer, h uintptr) uintptr {
 	return memhash16(p, h)
 }
 
-func _memhash32(p unsafe.Pointer, h uintptr) uintptr {
+func memhash16_2(p unsafe.Pointer, h uintptr) uintptr {
+	return memhash16(p, h)
+}
+
+func memhash32_1(p unsafe.Pointer, h uintptr) uintptr {
 	return memhash32(p, h)
 }
 
-func _memhash64(p unsafe.Pointer, h uintptr) uintptr {
+func memhash32_2(p unsafe.Pointer, h uintptr) uintptr {
+	return memhash32(p, h)
+}
+
+func memhash64_1(p unsafe.Pointer, h uintptr) uintptr {
+	return memhash64(p, h)
+}
+
+func memhash64_2(p unsafe.Pointer, h uintptr) uintptr {
 	return memhash64(p, h)
 }
 
@@ -170,7 +197,15 @@ func memequal8(p, q unsafe.Pointer) bool {
 	return *(*int8)(p) == *(*int8)(q)
 }
 
+func memequal8_1(p, q unsafe.Pointer) bool {
+	return *(*int8)(p) == *(*int8)(q)
+}
+
 func memequal16(p, q unsafe.Pointer) bool {
+	return *(*int16)(p) == *(*int16)(q)
+}
+
+func memequal16_1(p, q unsafe.Pointer) bool {
 	return *(*int16)(p) == *(*int16)(q)
 }
 
@@ -178,6 +213,14 @@ func memequal32(p, q unsafe.Pointer) bool {
 	return *(*int32)(p) == *(*int32)(q)
 }
 
+func memequal32_1(p, q unsafe.Pointer) bool {
+	return *(*int32)(p) == *(*int32)(q)
+}
+
 func memequal64(p, q unsafe.Pointer) bool {
+	return *(*int64)(p) == *(*int64)(q)
+}
+
+func memequal64_1(p, q unsafe.Pointer) bool {
 	return *(*int64)(p) == *(*int64)(q)
 }
