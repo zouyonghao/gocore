@@ -62,6 +62,8 @@ func SetupIDT() {
 func SetupIRQ() {
 	remapIRQ()
 
+    //Interrupt Request, In general:
+    //0: system timer; 1: keyboard; 8: CMOS; 12: touchPad; 13: numeric data processor
 	table[32] = Pack(IDTDesc{Offset: uint32(ptr.FuncToPtr(irq0)), Selector: 0x08, TypeAttr: 0x8E})
 	table[33] = Pack(IDTDesc{Offset: uint32(ptr.FuncToPtr(irq1)), Selector: 0x08, TypeAttr: 0x8E})
 	table[34] = Pack(IDTDesc{Offset: uint32(ptr.FuncToPtr(irq2)), Selector: 0x08, TypeAttr: 0x8E})
@@ -170,6 +172,8 @@ func PtrToFunc(ptr uintptr) func(r *regs.Regs) //Y U no allow (func())(unsafe.Po
 func pitHandler(r *regs.Regs)
 
 func loadTable() {
+    
+    // ISR(Interrupt Service Routines)0-31 exception
 	table[0] = Pack(IDTDesc{Offset: uint32(ptr.FuncToPtr(isr0)), Selector: 0x08, TypeAttr: 0x8E})
 	table[1] = Pack(IDTDesc{Offset: uint32(ptr.FuncToPtr(isr1)), Selector: 0x08, TypeAttr: 0x8E})
 	table[2] = Pack(IDTDesc{Offset: uint32(ptr.FuncToPtr(isr2)), Selector: 0x08, TypeAttr: 0x8E})

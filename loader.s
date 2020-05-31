@@ -107,10 +107,11 @@ gdtr dw 0
 	dd 0
     
 __load_gdt:
+    ;function calling convention: __cdecl
     cli
-    mov eax, [esp+4]
+    mov eax, [esp+4] ; first param
     mov [gdtr+2], eax
-    mov ax, [esp+8]
+    mov ax, [esp+8] ; second param
     mov [gdtr], ax
     lgdt [gdtr]
     ret

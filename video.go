@@ -14,6 +14,9 @@ func vidPtr() *[25][80][2]byte {
 }
 
 func Init() {
+     // multiboot has set VGA(video graphics array) mod
+     // we can write the specified addr to print something on the screen
+     // 0xb8000 + 2 * (row * 80 + col)
 	vidMem = 0xB8000
 	termColor = color.MakeColor(color.LIGHT_GRAY, color.BLACK)
 }

@@ -43,8 +43,9 @@ type TSS32 struct {
 }
 
 //var GDT uint64
+//the number of GDT entry
 const size uint16 = 5
-
+//every GDT entry is 8 byte
 var Table [size][8]uint8
 
 var TSSA TSS32
