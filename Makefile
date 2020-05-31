@@ -11,6 +11,7 @@ ASM = nasm -f elf
 CFLAGS_CROSS = -Werror -nostdlib -fno-builtin -nostartfiles -nodefaultlibs
 GOFLAGS_CROSS = -static  -Werror -nostdlib -nostartfiles -nodefaultlibs 
 INCLUDE_DIRS = -I.
+QEMU = qemu-system-i386
 
 ### Sources
 
@@ -26,10 +27,10 @@ clean:
 	rm -f $(SOURCE_OBJECTS) $(TEST_EXECS) kernel.bin kernel.o
 
 boot: kernel.bin
-	qemu-system-i386 -kernel kernel.bin -m 1024
+	$(QEMU) -kernel kernel.bin -m 1024
 
-# boot: kernel.iso
-# 	qemu-system-i386 -cdrom kernel.iso
+boot-iso: kernel.iso
+	qemu-system-i386 -cdrom kernel.iso
 
 ### Rules
 
@@ -45,9 +46,17 @@ boot: kernel.bin
 libgo.o: asm.o
 	$(CC_CROSS) $(CFLAGS_CROSS) libgo.c -o libgo.o
 
+test.o: asm.o
+	$(CC_CROSS) $(CFLAGS_CROSS) test.c -o test.o
+
 kernel.bin: $(SOURCE_OBJECTS)
 	$(LD_CROSS) -T link.ld -o kernel.bin $(SOURCE_OBJECTS)
- 
-# kernel.iso: kernel.bin
-# 	cp kernel.bin isodir/boot/kernel.bin
-# 	grub-mkrescue -o kernel.iso isodir
+
+debug: kernel.bin
+	gnome-terminal -- /bin/bash -c "$(QEMU) -S -s -d in_asm -D q.log -parallel stdio -kernel kernel.bin -serial null"
+	sleep 2
+	gnome-terminal -- /bin/bash -c "gdb -q -tui -x tools/gdbinit"
+
+kernel.iso: kernel.bin
+	cp kernel.bin isodir/boot/kernel.bin
+	grub-mkrescue -o kernel.iso isodir
