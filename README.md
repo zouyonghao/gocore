@@ -40,14 +40,10 @@ gcc configure: error: Building GCC requires GMP 4.2+, MPFR 2.3.1+ and MPC 0.8.0+
 
 ### [protected mode](https://github.com/zouyonghao/gocore/commit/bdbc28aa48d31463361a8cbbe9b9074f9d65f6bd)
 
-### console
+### [console](https://github.com/zouyonghao/gocore/blob/master/video.go)
 
-### init physical memory management
+### [init interrupt controller](https://github.com/zouyonghao/gocore/blob/master/idt.go)
 
-### init interrupt controller
+### [init interrupt descriptor table](https://github.com/zouyonghao/gocore/blob/master/idt.go)
 
-### init interrupt descriptor table
-
-### init clock interrupt
-
-### enable irq interrupt
+### [init clock interrupt](https://github.com/zouyonghao/gocore/blob/master/pit.go)
