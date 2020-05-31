@@ -5,3 +5,5 @@
 q.log
 .gitignore
 .cproject
+*.gox
+*.iso
