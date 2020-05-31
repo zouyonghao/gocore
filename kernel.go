@@ -40,7 +40,13 @@ func Kmain() {
 	// func Kmain(mdb uintptr, magic uintptr) {
 	video.Init()
 	video.Clear()
-
+    video.Print(`    mmmm     mmmm       mmmm     mmmm    mmmmmm    mmmmmmmm` + "\n")
+    video.Print(`  ##""""#   ##""##    ##""""#   ##""##   ##""""##  ##""""""` + "\n") 
+    video.Print(` ##        ##    ##  ##"       ##    ##  ##    ##  ##` + "\n")
+    video.Print(` ##  mmmm  ##    ##  ##        ##    ##  #######   #######` + "\n")
+    video.Print(` ##  ""##  ##    ##  ##m       ##    ##  ##  "##m  ##` + "\n")
+    video.Print(`  ##mmm##   ##mm##    ##mmmm#   ##mm##   ##    ##  ##mmmmmm ` + "\n")
+    video.Print(`    """"     """"       """"     """"    ""    """ """"""""` + "\n")
 	// video.PrintHex(uint64(*(*uint32)(unsafe.Pointer(magic))), false, true, true, 8)
 	// if magic != MULTIBOOT_BOOTLOADER_MAGIC {
 	// 	video.Print("Invalid magic number\n")
